@@ -1,0 +1,35 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "org.uiieditt.noise"
+        minSdkVersion 9
+        targetSdkVersion 21
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('personalkey.keystore')
+            storePassword "azezil1412"
+            keyAlias "personalkey"
+            keyPassword "azezil1412"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
+
+}
