@@ -100,10 +100,13 @@ public class PanelGambar extends BitmapFactory {
 	public void encryptAll(ProgressHandler hand) {
 		if (hand != null)
 			hand.setTotal(w * h);
+
 		c1 = 0;
 		c2 = 0;
-		w = newBmp.getWidth();
+
+        w = newBmp.getWidth();
 		h = newBmp.getHeight();
+
 		this.manipulate(hand);
 		this.sisipKey();
 	}
@@ -136,10 +139,6 @@ public class PanelGambar extends BitmapFactory {
 					try {
 						rgb = newBmp.getPixel(i, j);
 					} catch (Exception e) {
-						// Log.v("Error", "Kesalahan Kunci!");
-						// HANDLE WRONG KEY HERE
-						// JOptionPane.showMessageDialog(this,
-						// "Maybe you insert the wrong key !");
 						return false;
 					}
 
@@ -188,8 +187,6 @@ public class PanelGambar extends BitmapFactory {
     }
 
 	public File getOutputMediaFile() {
-		// To be safe, you should check that the SDCard is mounted
-		// using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "Noise");
 
@@ -200,18 +197,13 @@ public class PanelGambar extends BitmapFactory {
             }
         }
 
-		// This location works best if you want the created images to be shared
-		// between applications and persist after your app has been uninstalled.
-
-		// Create the storage directory if it does not exist
 		if (!mediaStorageDir.exists()) {
 			if (!mediaStorageDir.mkdirs()) {
 				return null;
 			}
 		}
-		// Create a media file name
-		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm")
-				.format(new Date());
+
+		String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
 		File mediaFile;
 		String mImageName = "TK_RC4_" + timeStamp + ".bmp";
 		mediaFile = new File(mediaStorageDir.getPath() + File.separator

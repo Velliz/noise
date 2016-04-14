@@ -1,17 +1,15 @@
 package org.uiieditt.core.algorithm;
 
-/**
- * @author Politel
- */
-
 public class KunciRC4 {
 
     private short[] S;
     private short[] U;
+
     private short[] keystream;
+
     private int length;
+
     private int LPT;
-    //private final int MAX_LENGTH = 2147483647;
 
     public KunciRC4() {
         length = 256;

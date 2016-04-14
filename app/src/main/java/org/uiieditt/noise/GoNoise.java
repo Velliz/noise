@@ -17,26 +17,25 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 
 import org.uiieditt.core.stegano.PanelGambar;
+import org.uiieditt.io.MobiProgressBar;
 
 public class GoNoise extends Activity implements OnClickListener {
 
-    PanelGambar panel;
+    private PanelGambar imagePanel;
 
-    // image variable
-    private Bitmap bmp = null;
+    private Bitmap bitmaps = null;
     private String picturePath = null;
 
-    // private Button enkrip, pilihGambar;
-    // private TextView arc4_key, seed_key;
-
     private Context context;
-    private long endtime;
+    private MobiProgressBar progressBar;
     private final Handler handler = new Handler();
-    private org.uiieditt.io.MobiProgressBar progressBar;
+
+    private long endTime;
 
     private int RESULT_LOAD_IMAGE = 1;
 
@@ -61,7 +60,6 @@ public class GoNoise extends Activity implements OnClickListener {
             }
         });
 
-		/* test dari sini */
         Button enkrip = (Button) findViewById(R.id.enc_buttonEnskripsi);
         enkrip.setOnClickListener(this);
 
@@ -69,7 +67,6 @@ public class GoNoise extends Activity implements OnClickListener {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
 
         ImageView imageView = (ImageView) findViewById(R.id.enc_imageRC4);
@@ -85,11 +82,10 @@ public class GoNoise extends Activity implements OnClickListener {
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             picturePath = cursor.getString(columnIndex);
-
-            bmp = BitmapFactory.decodeFile(picturePath);
+            bitmaps = BitmapFactory.decodeFile(picturePath);
 
             cursor.close();
-            imageView.setImageBitmap(bmp);
+            imageView.setImageBitmap(bitmaps);
         }
     }
 
@@ -98,15 +94,12 @@ public class GoNoise extends Activity implements OnClickListener {
             progressBar.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage("Kunci Tidak Boleh Kosong")
-                    .setCancelable(false)
-                    .setPositiveButton(context.getText(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int id) {
-                                    GoNoise.this.finish();
-                                }
-                            });
-
+                    .setCancelable(false).setPositiveButton(context.getText(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            GoNoise.this.finish();
+                        }
+                    });
             AlertDialog alert = builder.create();
             alert.show();
         }
@@ -117,16 +110,14 @@ public class GoNoise extends Activity implements OnClickListener {
             progressBar.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setMessage(
-                    "Noise dibuat.! Waktu : " + endtime / 1000000000.0
+                    "Noise dibuat.! Waktu : " + endTime / 1000000000.0
                             + " detik")
-                    .setCancelable(false)
-                    .setPositiveButton(context.getText(R.string.ok),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,
-                                                    int id) {
-                                    GoNoise.this.finish();
-                                }
-                            });
+                    .setCancelable(false).setPositiveButton(context.getText(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            GoNoise.this.finish();
+                        }
+                    });
 
             AlertDialog alert = builder.create();
             alert.show();
@@ -155,43 +146,39 @@ public class GoNoise extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
         TextView arc4_key = (TextView) findViewById(R.id.enc_kunciRC4);
-
         String kunci_arc4 = arc4_key.getText().toString();
 
         if (kunci_arc4 != null) {
 
             File f = new File(picturePath);
+            imagePanel = new PanelGambar(f);
+            imagePanel.setNewKey(kunci_arc4);
+            imagePanel.setFeed(kunci_arc4);
 
-            panel = new PanelGambar(f);
-
-            panel.setNewKey(kunci_arc4);
-            panel.setFeed(kunci_arc4);
-
-            progressBar = new org.uiieditt.io.MobiProgressBar(
-                    GoNoise.this);
+            progressBar = new MobiProgressBar(GoNoise.this);
             progressBar.setMax(100);
-            progressBar.setMessage(context
-                    .getString(R.string.gonoise));
+            progressBar.setCancelable(false);
+            progressBar.setMessage(context .getString(R.string.gonoise));
             progressBar.show();
 
             Thread tt = new Thread(new Runnable() {
                 long start = System.nanoTime();
 
                 public void run() {
-                    panel.encryptAll(new ProgressHandler() {
-                        private int mysize;
+                    imagePanel.encryptAll(new ProgressHandler() {
+                        private int fromSize;
                         private int actualSize;
 
                         @Override
                         public void setTotal(int tot) {
-                            mysize = tot / 50;
+                            fromSize = tot / 50;
                             handler.post(mInitializeProgress);
                         }
 
                         @Override
                         public void increment(int inc) {
                             actualSize += inc;
-                            if (actualSize % mysize == 0)
+                            if (actualSize % fromSize == 0)
                                 handler.post(mIncrementProgress);
                         }
 
@@ -200,16 +187,18 @@ public class GoNoise extends Activity implements OnClickListener {
 
                         }
                     });
+
                     handler.post(mSetInderminate);
-                    bmp = panel.getImage();
-                    endtime = System.nanoTime() - start;
-                    panel.saveImage(getBaseContext());
+                    bitmaps = imagePanel.getImage();
+                    endTime = System.nanoTime() - start;
+                    imagePanel.saveImage(getBaseContext());
                     handler.post(waktuEnskripsi);
                 }
             });
             tt.start();
         } else {
-            //Log.v("Kesalahan", "Belum mengisi kunci RC4 dan Kunci Feed");
+            Toast.makeText(context, "Kesalahan, Belum mengisi kunci RC4 dan Kunci Feed",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }
