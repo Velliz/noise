@@ -7,31 +7,16 @@
 
     <TextView
         android:id="@+id/textView1"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:text="@string/welcome"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:id="@+id/buttonEnskripsi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/gonoise" />
-
-    <Button
-        android:id="@+id/buttonDeskripsi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/revertnoise" />
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="wrap_content">
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/homeads"
@@ -40,7 +25,33 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/homeadds"/>
+            ads:adUnitId="@string/homeadds" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/buttonEnskripsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:text="@string/gonoise" />
+
+            <Button
+                android:id="@+id/buttonDeskripsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonEnskripsi"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:text="@string/revertnoise" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </LinearLayout>
