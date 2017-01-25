@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-public class RevertNoise extends Activity {
+public class RevertBackNoise extends Activity {
 
 	private String gambar = null;
 	private PanelGambar panel;
@@ -32,7 +32,7 @@ public class RevertNoise extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.revertnoise);
+		setContentView(R.layout.revert_back_noise);
 		context = this;
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
@@ -62,8 +62,9 @@ public class RevertNoise extends Activity {
 				panel = new PanelGambar(new File(gambar));
 				panel.setFeed(seedString);
 
-				progressBar = new org.uiieditt.io.MobiProgressBar(RevertNoise.this);
+				progressBar = new org.uiieditt.io.MobiProgressBar(RevertBackNoise.this);
 				progressBar.setMax(100);
+				progressBar.setCancelable(false);
 				progressBar.setMessage(context.getString(R.string.revertnoise));
 				progressBar.show();
 
@@ -121,7 +122,7 @@ public class RevertNoise extends Activity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									RevertNoise.this.finish();
+									RevertBackNoise.this.finish();
 								}
 							});
 
@@ -129,7 +130,7 @@ public class RevertNoise extends Activity {
 			alert.show();
 		}
 	};
-	
+
 	final Runnable kesalahanKunci2 = new Runnable() {
 		public void run() {
 			progressBar.dismiss();
@@ -152,15 +153,15 @@ public class RevertNoise extends Activity {
 		public void run() {
 			progressBar.dismiss();
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
+			builder.setTitle("Revert Back Success");
 			builder.setMessage(
-					"Rollback Sukses.! Waktu : " + endtime / 1000000000.0
-							+ " detik")
+					"Time Elapsed " + Math.floor(endtime / 1000000000.0) + " Seconds")
 					.setCancelable(false)
 					.setPositiveButton(context.getText(R.string.ok),
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int id) {
-									RevertNoise.this.finish();
+									RevertBackNoise.this.finish();
 								}
 							});
 

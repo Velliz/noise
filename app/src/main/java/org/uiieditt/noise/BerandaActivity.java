@@ -31,11 +31,10 @@ public class BerandaActivity extends Activity {
     }
 
 	private void initClick() {
-		Button enskripsi = (Button) findViewById(R.id.buttonEnskripsi);
-		Button deskripsi = (Button) findViewById(R.id.buttonDeskripsi);
+		Button encrypt = (Button) findViewById(R.id.buttonEnskripsi);
+		Button decrypt = (Button) findViewById(R.id.buttonDeskripsi);
 
-		enskripsi.setOnClickListener(new OnClickListener() {
-
+		encrypt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
@@ -46,8 +45,7 @@ public class BerandaActivity extends Activity {
 			}
 		});
 
-		deskripsi.setOnClickListener(new OnClickListener() {
-
+		decrypt.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();

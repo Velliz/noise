@@ -107,9 +107,9 @@ public class CreateNewNoise extends Activity implements OnClickListener {
         public void run() {
             progressBar.dismiss();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Create Success");
             builder.setMessage(
-                    "Noise dibuat.! Waktu : " + endTime / 1000000000.0
-                            + " detik")
+                    "Time Elapsed " + Math.floor(endTime / 1000000000.0) + " Seconds")
                     .setCancelable(false).setPositiveButton(context.getText(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {

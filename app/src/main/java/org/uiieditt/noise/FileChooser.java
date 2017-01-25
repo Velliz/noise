@@ -11,51 +11,47 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import org.uiieditt.io.fileutil.Option2;
 
 public class FileChooser extends ListActivity {
+
 	private File currentDir;
 	private FileArrayAdapter adapter;
 	private FileFilter fileFilter;
+
 	private File fileSelected;
+
 	private ArrayList<String> extensions;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		Bundle extras = getIntent().getExtras();
+
 		if (extras != null) {
 			if (extras.getStringArrayList("filterFileExtension") != null) {
 				extensions = extras.getStringArrayList("filterFileExtension");
 				fileFilter = new FileFilter() {
 					@Override
 					public boolean accept(File pathname) {
-						return ((pathname.isDirectory()) || (pathname.getName()
-                                .contains(".") && extensions.contains(pathname
-                                .getName().substring(
-                                        pathname.getName().lastIndexOf(".")))));
+						return ((pathname.isDirectory()) || (pathname.getName().contains(".") && extensions.contains(".bmp")));
 					}
 				};
 			}
 		}
 
-		currentDir = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES)));
+		currentDir = new File(Environment.getExternalStorageDirectory().toString() + "/Pictures/Noise");
 		fill(currentDir);
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if ((!currentDir.getName().equals("sdcard"))
-					&& (currentDir.getParentFile() != null)) {
-				currentDir = currentDir.getParentFile();
-				fill(currentDir);
-			} else {
-				finish();
-			}
+            finish();
 			return false;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -69,36 +65,26 @@ public class FileChooser extends ListActivity {
 			dirs = f.listFiles();
 
 		this.setTitle(getString(R.string.currentdir) + ": " + f.getName());
-		List<Option2> dir = new ArrayList<Option2>();
-		List<Option2> fls = new ArrayList<Option2>();
+		List<Option2> dir = new ArrayList<>();
+		List<Option2> fls = new ArrayList<>();
 		try {
 			for (File ff : dirs) {
 				if (ff.isDirectory() && !ff.isHidden())
-					dir.add(new Option2(ff.getName(),
-							getString(R.string.folder), ff.getAbsolutePath(),
-							true, false));
+					dir.add(new Option2(ff.getName(), getString(R.string.folder), ff.getAbsolutePath(), true, false));
 				else {
 					if (!ff.isHidden())
-						fls.add(new Option2(ff.getName(),
-								getString(R.string.filesize) + ": "
-										+ ff.length(), ff.getAbsolutePath(),
-								false, false));
+						fls.add(new Option2(ff.getName(), getString(R.string.filesize) + ": " + ff.length(), ff.getAbsolutePath(), false, false));
 				}
 			}
 		} catch (Exception e) {
 
 		}
+
 		Collections.sort(dir);
 		Collections.sort(fls);
 		dir.addAll(fls);
-		if (!f.getName().equalsIgnoreCase("sdcard")) {
-			if (f.getParentFile() != null)
-				dir.add(0, new Option2("..",
-						getString(R.string.parentdir), f.getParent(),
-						false, true));
-		}
-		adapter = new FileArrayAdapter(FileChooser.this, R.layout.filechooser,
-				dir);
+
+		adapter = new FileArrayAdapter(FileChooser.this, R.layout.file_chooser, dir);
 		this.setListAdapter(adapter);
 	}
 
@@ -111,21 +97,14 @@ public class FileChooser extends ListActivity {
 			currentDir = new File(o.getPath());
 			fill(currentDir);
 		} else {
-			// onFileClick(o);
-			fileSelected = new File(o.getPath());
+			this.fileSelected = new File(o.getPath());
 			Intent intent = new Intent();
-			intent.putExtra("fileSelected", fileSelected.getAbsolutePath());
-			intent.setComponent(new ComponentName(RevertNoise.class
-					.getPackage().getName(), RevertNoise.class
+			intent.putExtra("fileSelected", this.fileSelected.getAbsolutePath());
+			intent.setComponent(new ComponentName(RevertBackNoise.class
+					.getPackage().getName(), RevertBackNoise.class
 					.getCanonicalName()));
 			startActivity(intent);
-//			setResult(Activity.RESULT_OK, intent);
 			finish();
 		}
 	}
-
-//	private void onFileClick(Option2 o) {
-//		Toast.makeText(this, "File Clicked: " + o.getName(), Toast.LENGTH_SHORT)
-//				.show();
-//	}
 }

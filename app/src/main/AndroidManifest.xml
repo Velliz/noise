@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RevertNoise" />
+        <activity android:name=".RevertBackNoise" />
         <activity android:name=".FileChooser" />
 
     </application>
