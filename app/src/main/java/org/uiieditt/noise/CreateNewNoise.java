@@ -24,7 +24,7 @@ import java.io.File;
 import org.uiieditt.core.stegano.PanelGambar;
 import org.uiieditt.io.MobiProgressBar;
 
-public class GoNoise extends Activity implements OnClickListener {
+public class CreateNewNoise extends Activity implements OnClickListener {
 
     private PanelGambar imagePanel;
 
@@ -42,26 +42,24 @@ public class GoNoise extends Activity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gonoise);
+        setContentView(R.layout.create_new_noise);
         context = this;
         initClick();
     }
 
     private void initClick() {
-        Button pilihGambar = (Button) findViewById(R.id.enc_pilihGambar);
-        pilihGambar.setOnClickListener(new OnClickListener() {
+        Button imageChooser = (Button) findViewById(R.id.enc_pilihGambar);
+        imageChooser.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
             }
         });
 
-        Button enkrip = (Button) findViewById(R.id.enc_buttonEnskripsi);
-        enkrip.setOnClickListener(this);
+        Button encryptButton = (Button) findViewById(R.id.enc_buttonEnskripsi);
+        encryptButton.setOnClickListener(this);
 
     }
 
@@ -97,7 +95,7 @@ public class GoNoise extends Activity implements OnClickListener {
                     .setCancelable(false).setPositiveButton(context.getText(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            GoNoise.this.finish();
+                            CreateNewNoise.this.finish();
                         }
                     });
             AlertDialog alert = builder.create();
@@ -115,7 +113,7 @@ public class GoNoise extends Activity implements OnClickListener {
                     .setCancelable(false).setPositiveButton(context.getText(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            GoNoise.this.finish();
+                            CreateNewNoise.this.finish();
                         }
                     });
 
@@ -155,7 +153,7 @@ public class GoNoise extends Activity implements OnClickListener {
             imagePanel.setNewKey(kunci_arc4);
             imagePanel.setFeed(kunci_arc4);
 
-            progressBar = new MobiProgressBar(GoNoise.this);
+            progressBar = new MobiProgressBar(CreateNewNoise.this);
             progressBar.setMax(100);
             progressBar.setCancelable(false);
             progressBar.setMessage(context .getString(R.string.gonoise));
