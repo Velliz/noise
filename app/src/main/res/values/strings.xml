@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="appname">Photo Noise</string>
+
     <string name="gonoise">Create New Noise</string>
-    <string name="revertnoise">Revert Back</string>
+    <string name="revertnoise">Revert Back Noise</string>
+
     <string name="welcome">Welcome To Noise</string>
     <string name="menu">Choose Actions</string>
     <string name="settings">Settings</string>
 	<string name="chooseimage">Choose Image</string>
+	<string name="about">About</string>
 	<string name="ok">OK</string>
 	<string name="folder">Folder</string>
     <string name="parentdir">Back</string>
